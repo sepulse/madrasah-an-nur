@@ -56,3 +56,7 @@ assets/img/              ← logo dan foto
 ```
 
 Bahan sumber penyelidikan: `D:\Sepul Lab\Madrasah Annur - Bahan Laman Web`.
+
+## Kemas kini laman live
+
+Selepas mengubah CSS/JS/kandungan, tukar nilai `?v=` pada pautan `gaya.css`, `kandungan.js` dan `app.js` dalam semua fail `.html` (contoh `?v=20261023a`) supaya pelayar memuat turun versi baharu, bukan salinan cache lama.

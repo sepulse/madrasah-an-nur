@@ -232,6 +232,7 @@
     const sebaris = pautan.map((n) => `<li><a href="${n.href}">${n.teks}</a></li>`).join("")
       + (draf ? '<li><a href="semakan.html">Senarai semakan (draf)</a></li>' : "");
     return `<footer class="kaki">
+      <div class="kaki__siluet" aria-hidden="true">${MASJID}${GELOMBANG}</div>
       <div class="kaki__jalur ${boleh(fotoKaki) ? "" : "corak"}">
         ${boleh(fotoKaki) ? `<img src="${esc(fotoKaki.fail)}" alt="" loading="lazy">` : ""}
         <p lang="ar" dir="rtl">${esc(K.identiti.namaArab)}</p>
@@ -399,7 +400,7 @@
 
     return `
     <section class="hero" aria-labelledby="hero-judul">
-      <div class="hero__latar ${fHero.length ? "" : "corak"}">${fHero.map((f, i) => `<img src="${esc(f.fail)}" alt=""${i ? ' decoding="async"' : ' fetchpriority="high" class="aktif"'}>`).join("")}</div>
+      <div class="hero__latar ${fHero.length ? "" : "corak"}">${fHero.map((f, i) => `<img src="${esc(f.fail)}" alt=""${i ? ' decoding="async"' : ' fetchpriority="high" class="aktif zum"'}>`).join("")}</div>
       <div class="hero__bingkai" aria-hidden="true"></div>
       <div class="hero__isi">
         <p class="hero__arab arab" lang="ar">${esc(K.identiti.namaArab)}</p>
@@ -912,11 +913,20 @@
     const gambar = $$(".hero__latar img");
     if (gambar.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let i = 0;
+    // Nyahkod imej awal supaya pertukaran tidak tersangkut
+    Promise.all(gambar.map((g) => (g.decode ? g.decode().catch(() => {}) : null)));
     setInterval(() => {
       if (document.hidden) return;
-      gambar[i].classList.remove("aktif");
+      const lama = gambar[i];
       i = (i + 1) % gambar.length;
-      gambar[i].classList.add("aktif");
+      const baru = gambar[i];
+      gambar.forEach((g) => g.classList.remove("keluar"));
+      lama.classList.remove("aktif");
+      lama.classList.add("keluar");
+      baru.classList.remove("zum");
+      void baru.offsetWidth; // mulakan semula zum dari awal
+      baru.classList.add("aktif", "zum");
+      setTimeout(() => { if (lama !== baru) lama.classList.remove("keluar", "zum"); }, 2200);
     }, 6500);
   })();
   // Motif latar seksyen putih: berputar dan beralih perlahan ketika ditatal

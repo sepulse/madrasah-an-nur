@@ -221,7 +221,6 @@
   }
 
   function binaKaki() {
-    const fotoKaki = K.foto["foto-maulid"];
     const pautan = NAV.filter((n) => !n.tunjuk || n.tunjuk());
     const peta = K.hubungi.petaPin && K.hubungi.petaPin.pautan;
     const sosial = [
@@ -233,8 +232,7 @@
       + (draf ? '<li><a href="semakan.html">Senarai semakan (draf)</a></li>' : "");
     return `<footer class="kaki">
       <div class="kaki__siluet" aria-hidden="true">${MASJID}${GELOMBANG}</div>
-      <div class="kaki__jalur ${boleh(fotoKaki) ? "" : "corak"}">
-        ${boleh(fotoKaki) ? `<img src="${esc(fotoKaki.fail)}" alt="" loading="lazy">` : ""}
+      <div class="kaki__jalur">
         <p lang="ar" dir="rtl">${esc(K.identiti.namaArab)}</p>
       </div>
       <div class="kaki__bingkai">

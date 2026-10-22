@@ -342,22 +342,39 @@
     const fSurau = K.foto["foto-surau"];
 
     const panel = [
-      { tab: "Hafazan Al-Quran", warna: "var(--hijau-900)", t: teras[0], sisi: "Hafazan", ik: "quran",
-        media: `<div class="kad-media__corak"><span class="arab" lang="ar">القرآن</span></div>` },
-      { tab: "Pengajian Agama", warna: "var(--biru-900)", t: teras[1], sisi: "Pengajian agama", ik: "kitab",
-        media: `<div class="kad-media__corak"><span class="arab" lang="ar">العلم</span></div>` },
-      { tab: "Kokurikulum", warna: "var(--hijau-700)", t: teras[3], sisi: "Qasidah & futsal", ik: "bintang", cip: ["Qasidah", "Futsal", "Sautun Nur"],
-        media: `<div class="kad-media__corak"><div><span class="arab" lang="ar">صوت النور</span><small>Kumpulan qasidah</small></div></div>` },
-      { tab: "Kemudahan", warna: "var(--biru-700)", sisi: "Kemudahan", ik: "rumah",
+      { tab: "Hafazan Al-Quran", warna: "var(--hijau-900)", t: teras[0],
+        blok: [
+          { tajuk: "Al-Quran", teks: "Ujian al-Quran dalaman" },
+          { tajuk: "Hafazan", teks: "Ujian hafazan dalaman" },
+          { tajuk: "10 juzuk", teks: "Pelajar tamat hafazan, Okt 2026" }
+        ] },
+      { tab: "Pengajian Agama", warna: "var(--biru-900)", t: teras[1],
+        blok: [
+          { tajuk: "5 bidang", teks: "Tasawuf, feqah, sirah, hadith, tauhid" },
+          { tajuk: "Fardu ain", teks: "Pentaksiran dalaman" },
+          { tajuk: "Melayu", teks: "Bahasa pengantar" }
+        ] },
+      { tab: "Kokurikulum", warna: "var(--hijau-700)", t: teras[3],
+        blok: [
+          { tajuk: "Qasidah", teks: "Kumpulan Sautun Nur" },
+          { tajuk: "Futsal", teks: "Sukan pelajar" },
+          { tajuk: "Tilawah", teks: "Persembahan peringkat Bahagian Samarahan" }
+        ] },
+      { tab: "Kemudahan", warna: "var(--biru-700)",
         t: { tajuk: "Kemudahan", teks: "Profil institusi merekodkan kemudahan pembelajaran, ibadah dan asrama di kawasan madrasah.", status: kemudahan.status, sumber: kemudahan.sumber, catatan: kemudahan.catatan },
-        cip: kemudahan.senarai.slice(0, 7),
-        media: boleh(fSurau)
-          ? `<img src="${esc(fSurau.fail)}" alt="${esc(fSurau.alt)}" loading="lazy"><figcaption>${esc(fSurau.kapsyen)} ${lencanaFoto(fSurau)}</figcaption>`
-          : `<div class="kad-media__corak"><span class="arab" lang="ar">مصلى</span></div>` },
-      { tab: "Rekod Pendaftaran", warna: "var(--hijau-950)", sisi: "Rekod portal", ik: "maklumat",
+        blok: [
+          { tajuk: "Pembelajaran", teks: "Bilik kelas (2), perpustakaan, bilik mesyuarat" },
+          { tajuk: "Ibadah", teks: "Surau dan tempat wuduk", foto: boleh(fSurau) ? fSurau.fail : "" },
+          { tajuk: "Asrama", teks: "Asrama lelaki, dewan makan / kantin" }
+        ] },
+      { tab: "Rekod Pendaftaran", warna: "var(--hijau-950)",
         t: { tajuk: "Rekod Pendaftaran", teks: "Disenaraikan dalam senarai IPIP JAIS sebagai tahfiz swasta, dan dalam KISWA dengan nombor rekod MIS-IPIP-49 berstatus Sementara.", status: "rasmi", sumber: ["kiswaSenarai", "jais"],
           catatan: "Jangan tulis sebagai pendaftaran kekal atau diiktiraf sepenuhnya. Semak surat kelulusan semasa." },
-        media: `<div class="kad-media__corak"><div><span class="kod">MIS-IPIP-49</span><small>Status KISWA: Sementara</small></div></div>` }
+        blok: [
+          { tajuk: "JAIS", teks: "Senarai IPIP · tahfiz swasta" },
+          { tajuk: "MIS-IPIP-49", teks: "Nombor rekod KISWA" },
+          { tajuk: "Sementara", teks: "Status dalam KISWA" }
+        ] }
     ];
 
     const fakta = [
@@ -426,14 +443,15 @@
             <div>
               <h3>${esc(p.t.tajuk)}</h3>
               <p>${esc(p.t.teks)}</p>
-              ${(p.cip || p.t.senarai) ? `<ul class="mengenali__cip">${(p.cip || p.t.senarai).map((c) => `<li>${esc(c)}</li>`).join("")}</ul>` : ""}
               <div>${lencana(p.t)}</div>
               ${nota(p.t.catatan || p.t.tambahan)}
             </div>
-            <figure class="kad-media" style="margin:0">
-              <div class="kad-media__sisi">${ikon(p.ik)}<span>${esc(p.sisi)}</span></div>
-              <div class="kad-media__isi">${p.media}</div>
-            </figure>
+            <div class="panel-blok">${p.blok.map((b, j) => `<div class="panel-blok__item">
+              ${b.foto ? `<img class="panel-blok__foto" src="${esc(b.foto)}" alt="" loading="lazy">` : ""}
+              ${bintangHiasan()}
+              <div><span class="kad-peringkat__no">0${j + 1}</span><strong>${esc(b.tajuk)}</strong><span>${esc(b.teks)}</span></div>
+              <span class="kad-peringkat__garis"></span>
+            </div>`).join("")}</div>
           </div>`).join("")}
         <div class="tab-bar" role="tablist" aria-label="Mengenali An Nur">
           ${panel.map((p, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="panel-${i}" aria-selected="${i === 0}" tabindex="${i ? -1 : 0}">${esc(p.tab)}</button>`).join("")}

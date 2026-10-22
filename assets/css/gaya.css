@@ -367,6 +367,23 @@ a.lencana:hover { filter: brightness(.9); }
 .kad-media__corak .kod { font-size: clamp(30px, 4vw, 46px); font-weight: 800; letter-spacing: -.02em; }
 .kad-media__corak small { display: block; text-align: center; font-size: 12.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--kuning-400); margin-top: 10px; }
 
+/* Blok bernombor dalam panel Mengenali (gaya kad peringkat) */
+.panel-blok { container-type: inline-size; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; border-radius: var(--radius); overflow: hidden; min-height: 340px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.panel-blok__item { position: relative; padding: 28px 22px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; isolation: isolate; transition: transform var(--peralihan), filter var(--peralihan); }
+.panel-blok__item:nth-child(1) { background-color: var(--hijau-700); }
+.panel-blok__item:nth-child(2) { background-color: var(--biru-700); }
+.panel-blok__item:nth-child(3) { background-color: var(--hijau-800); }
+.panel-blok__item:hover { transform: translateY(-6px); filter: brightness(1.08); }
+.panel-blok__item { box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+.panel-blok__foto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .32; z-index: -2; transition: opacity 400ms ease; }
+.panel-blok__item:hover .panel-blok__foto { opacity: .5; }
+.panel-blok__item .bintang-hiasan { right: -60px; bottom: -60px; width: 200px; opacity: .14; z-index: -1; transition: transform 800ms ease, opacity 400ms ease; }
+.panel-blok__item:hover .bintang-hiasan { transform: rotate(45deg) scale(1.08); opacity: .24; }
+.panel-blok__item strong { display: block; font-size: clamp(16px, calc((100cqi / 3 - 48px) / 6.4), 26px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; margin: 8px 0 10px; white-space: nowrap; }
+.panel-blok__item span:not(.kad-peringkat__no):not(.kad-peringkat__garis) { display: block; font-size: 14px; line-height: 1.45; color: rgba(255,255,255,.85); }
+.panel-blok__item .kad-peringkat__garis { transition: width var(--peralihan); }
+.panel-blok__item:hover .kad-peringkat__garis { width: 72px; }
+@media (max-width: 860px) { .panel-blok { grid-template-columns: 1fr; min-height: 0; } .panel-blok__item { min-height: 160px; } .panel-blok__item strong { font-size: 26px; } }
 .tab-bar { margin-top: clamp(40px, 5vw, 64px); background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); padding: 6px; border-radius: 16px; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
 .tab-bar::-webkit-scrollbar { display: none; }
 .tab-bar button {

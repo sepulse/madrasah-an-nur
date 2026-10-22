@@ -312,6 +312,12 @@ a.lencana:hover { filter: brightness(.9); }
 /* ---------- Bahagian am ---------- */
 .seksyen { padding: clamp(64px, 9vw, 120px) 0; position: relative; }
 .seksyen--krim { background-color: var(--krim); }
+/* Motif mandala di belakang seksyen putih; overflow: clip supaya position: sticky di dalamnya masih berfungsi */
+.ada-motif { overflow: clip; isolation: isolate; }
+.ada-motif > :not(.motif-latar) { position: relative; z-index: 1; }
+.motif-latar { position: absolute; width: clamp(420px, 52vw, 760px); aspect-ratio: 1; color: var(--hijau-700); opacity: .1; pointer-events: none; transform: translateY(-50%); will-change: transform; z-index: 0; }
+.motif-latar--kanan { right: clamp(-320px, -16vw, -140px); }
+.motif-latar--kiri { left: clamp(-320px, -16vw, -140px); }
 .seksyen--hijau { background-color: var(--hijau-900); color: #fff; }
 .label-atas {
   display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--hijau-600); margin-bottom: 14px;

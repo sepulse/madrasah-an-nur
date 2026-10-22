@@ -134,6 +134,16 @@
     </svg>`;
   }
 
+  // Motif besar seperti mandala untuk latar seksyen putih (bintang lapan berlapis)
+  function motifLatar(kelas) {
+    const lapis = [98, 84, 66, 48, 30].map((R, i) =>
+      `<path d="${laluanBintang(100, 100, R)}" transform="rotate(${i % 2 ? 22.5 : 0} 100 100)"/>`).join("");
+    return `<svg class="motif-latar ${kelas}" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width=".6">${lapis}
+        <circle cx="100" cy="100" r="74"/><circle cx="100" cy="100" r="56"/><circle cx="100" cy="100" r="12"/>
+      </g></svg>`;
+  }
+
   const MASJID = `<svg class="masjid" viewBox="0 0 440 120" aria-hidden="true" focusable="false"><g fill="#fff">
     <rect x="40" y="96" width="360" height="26"/>
     <rect x="168" y="84" width="104" height="14"/>
@@ -893,6 +903,36 @@
   $("#kaki").innerHTML = binaKaki();
 
   /* ---------------- Interaksi ---------------- */
+  // Motif latar seksyen putih: berputar dan beralih perlahan ketika ditatal
+  const seksyenPutih = $$("#utama .seksyen").filter((el) => !/corak|seksyen--|cta/.test(el.className));
+  const motif = [];
+  seksyenPutih.forEach((el) => {
+    const bil = Math.max(1, Math.round(el.offsetHeight / 1100));
+    el.classList.add("ada-motif");
+    for (let k = 0; k < bil; k++) {
+      el.insertAdjacentHTML("afterbegin", motifLatar(k % 2 ? "motif-latar--kiri" : "motif-latar--kanan"));
+      const m = el.firstElementChild;
+      m.style.top = ((k + 0.5) / bil * 100) + "%";
+      motif.push({ m, el, arah: k % 2 ? -1 : 1 });
+    }
+  });
+  if (motif.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let menunggu = false;
+    const gerak = () => {
+      menunggu = false;
+      const t = window.innerHeight;
+      motif.forEach(({ m, el, arah }) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > t + 200) return;
+        const kemajuan = (t - r.top) / (t + r.height);
+        m.style.transform = `translateY(calc(-50% + ${((kemajuan - 0.5) * -120).toFixed(1)}px)) rotate(${(kemajuan * 90 * arah).toFixed(2)}deg)`;
+      });
+    };
+    gerak();
+    window.addEventListener("scroll", () => { if (!menunggu) { menunggu = true; requestAnimationFrame(gerak); } }, { passive: true });
+    window.addEventListener("resize", gerak);
+  }
+
   // Tukar mod draf / pratonton awam
   $$("[data-tukar-mod]").forEach((b) => b.addEventListener("click", () => {
     const u = new URL(location.href);

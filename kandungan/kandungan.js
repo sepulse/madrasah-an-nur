@@ -57,6 +57,7 @@ window.KANDUNGAN = {
     fotoMaulid: { nama: "Foto Facebook — majlis maulid", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1662965372007934&set=pcb.1662965748674563" },
     fotoBomba: { nama: "Foto Facebook — lawatan bomba", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1668458931458578&set=pcb.1668459351458536" },
     fotoRuang: { nama: "Foto Facebook — pemeriksaan ruang", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1668459081458563&set=pcb.1668459351458536" },
+    fotoPelajar: { nama: "Foto Facebook — pelajar di ruang surau", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1662965455341259" },
     fotoBangunan: { nama: "Foto Facebook — bangunan madrasah", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1246462213658254" },
     posterWakaf: { nama: "Poster projek wakaf (Facebook, 30 Nov 2023)", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=902934651344347&set=a.104212634549890" },
     infaqpay: { nama: "Halaman InfaqPay (Direct Debit)", jenis: "sekunder", url: "https://infaqpay.my/go/madrasahtahfizannurgedong" },
@@ -231,6 +232,14 @@ window.KANDUNGAN = {
       kapsyen: "Bangunan Madrasah Tahfiz An-Nur Gedong.",
       status: "facebook", sumber: ["fotoBangunan"],
       catatan: "Dimuat turun daripada album Facebook madrasah; minta kebenaran pengurusan sebelum laman diterbitkan."
+    },
+    // Slaid kedua hero beranda — pelajar dilihat dari jauh/belakang; wajah tidak dikenal pasti.
+    "foto-pelajar": {
+      fail: "assets/img/foto/foto-pelajar-mengaji.jpg",
+      alt: "Pelajar berpakaian putih dan berserban duduk bersila di ruang surau madrasah menghadap guru yang mengetuai majlis bacaan.",
+      kapsyen: "Pelajar mengikuti majlis bacaan di surau madrasah.",
+      status: "facebook", sumber: ["fotoPelajar"],
+      catatan: "Dimuat turun daripada album Facebook madrasah (Mobile uploads); minta kebenaran pengurusan sebelum laman diterbitkan."
     },
     // Foto disahkan pengurusan untuk penerbitan.
     "foto-maulid": {

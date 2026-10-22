@@ -343,7 +343,7 @@
   }
 
   function beranda() {
-    const fHero = K.foto["foto-bangunan"];
+    const fHero = [K.foto["foto-bangunan"], K.foto["foto-pelajar"]].filter(boleh);
     const bahagian = pecahNama(nama);
     const intro = K.identiti.pengenalan;
     const aktiviti = K.aktiviti.filter(boleh);
@@ -399,7 +399,7 @@
 
     return `
     <section class="hero" aria-labelledby="hero-judul">
-      <div class="hero__latar ${boleh(fHero) ? "" : "corak"}">${boleh(fHero) ? `<img src="${esc(fHero.fail)}" alt="" fetchpriority="high">` : ""}</div>
+      <div class="hero__latar ${fHero.length ? "" : "corak"}">${fHero.map((f, i) => `<img src="${esc(f.fail)}" alt=""${i ? ' decoding="async"' : ' fetchpriority="high" class="aktif"'}>`).join("")}</div>
       <div class="hero__bingkai" aria-hidden="true"></div>
       <div class="hero__isi">
         <p class="hero__arab arab" lang="ar">${esc(K.identiti.namaArab)}</p>
@@ -448,8 +448,11 @@
       <span class="mengenali__khat arab" lang="ar" aria-hidden="true">النور</span>
       <div class="bekas">
         <h2 class="mengenali__judul" id="mengenali-judul"><span class="mengenali__label">Mengenali</span><span class="mengenali__nama"><span class="garis">An</span> Nur</span></h2>
+        <div class="tab-bar" role="tablist" aria-label="Mengenali An Nur">
+          ${panel.map((p, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="panel-${i}" aria-selected="${i === 0}" tabindex="${i ? -1 : 0}">${esc(p.tab)}</button>`).join("")}
+        </div>
         ${panel.map((p, i) => `
-          <div class="mengenali__panel" role="tabpanel" id="panel-${i}" aria-labelledby="tab-${i}" ${i ? "hidden" : ""} data-warna="${p.warna}">
+          <div class="mengenali__panel" role="tabpanel" id="panel-${i}" aria-labelledby="tab-${i}" tabindex="0" ${i ? "hidden" : ""} data-warna="${p.warna}">
             <div>
               <h3>${esc(p.t.tajuk)}</h3>
               <p>${esc(p.t.teks)}</p>
@@ -463,9 +466,6 @@
               <span class="kad-peringkat__garis"></span>
             </div>`).join("")}</div>
           </div>`).join("")}
-        <div class="tab-bar" role="tablist" aria-label="Mengenali An Nur">
-          ${panel.map((p, i) => `<button type="button" role="tab" id="tab-${i}" aria-controls="panel-${i}" aria-selected="${i === 0}" tabindex="${i ? -1 : 0}">${esc(p.tab)}</button>`).join("")}
-        </div>
       </div>
     </section>
 
@@ -683,11 +683,7 @@
           ${sumberPertama(v).map((s) => `<a class="btn btn--garis" href="${esc(s.url)}" target="_blank" rel="noopener">Tonton di Facebook ${ikon("luar")}<span class="sr-only"> (pautan luar)</span></a>`).join("")}
         </article>`).join("")}</div>
       </section>` : ""}
-    </div></div>
-    <div class="kotak-lampu" role="dialog" aria-modal="true" aria-label="Paparan foto">
-      <button type="button" aria-label="Tutup paparan foto">${ikon("tutup")}</button>
-      <img alt=""><p></p>
-    </div>`;
+    </div></div>`;
   }
 
   /* ---------------- Halaman: Kemasukan ---------------- */
@@ -766,6 +762,7 @@
     const pin = boleh(h.petaPin) && h.petaPin.lat ? h.petaPin : null;
     return heroHalaman("Hubungi <em>Kami</em>", "Facebook madrasah ialah saluran yang boleh digunakan sekarang. Saluran lain akan ditambah selepas disahkan.", "Hubungi") + `
     <div class="seksyen"><div class="bekas">
+      <h2 class="sr-only">Saluran hubungan</h2>
       <div class="grid-hubungi blok">
         <article class="kad-hubungi kad-hubungi--utama">
           <span class="kad-hubungi__ikon">${ikon("facebook")}</span>
@@ -901,8 +898,27 @@
   $("#kepala").innerHTML = binaKepala();
   $("#utama").innerHTML = (PEMBINA[halaman] || beranda)();
   $("#kaki").innerHTML = binaKaki();
+  // Kotak lampu foto dikongsi: dijana pada mana-mana halaman yang ada butang besarkan foto
+  if ($("[data-lampu]")) {
+    document.body.insertAdjacentHTML("beforeend", `<div class="kotak-lampu" role="dialog" aria-modal="true" aria-label="Paparan foto">
+      <button type="button" aria-label="Tutup paparan foto">${ikon("tutup")}</button>
+      <img alt=""><p></p>
+    </div>`);
+  }
 
   /* ---------------- Interaksi ---------------- */
+  // Latar hero beranda bertukar perlahan; tiada pertukaran jika pengguna memilih kurang gerakan
+  (function () {
+    const gambar = $$(".hero__latar img");
+    if (gambar.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let i = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      gambar[i].classList.remove("aktif");
+      i = (i + 1) % gambar.length;
+      gambar[i].classList.add("aktif");
+    }, 6500);
+  })();
   // Motif latar seksyen putih: berputar dan beralih perlahan ketika ditatal
   const seksyenPutih = $$("#utama .seksyen").filter((el) => !/corak|seksyen--|cta/.test(el.className));
   const motif = [];
@@ -952,15 +968,30 @@
   const nav = $("#nav-utama");
   const bukaMenu = $('.butang-menu[aria-controls="nav-utama"]');
   const tutupMenu = $(".nav__tutup");
-  function setMenu(buka) {
+  function setMenu(buka, fokus = true) {
     nav.classList.toggle("terbuka", buka);
     bukaMenu.setAttribute("aria-expanded", String(buka));
     document.body.style.overflow = buka ? "hidden" : "";
+    if (!fokus) return;
     if (buka) tutupMenu.focus(); else bukaMenu.focus();
   }
   bukaMenu.addEventListener("click", () => setMenu(true));
   tutupMenu.addEventListener("click", () => setMenu(false));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && nav.classList.contains("terbuka")) setMenu(false); });
+  // Tutup apabila pautan dipilih (penting untuk pautan #anchor pada halaman yang sama)
+  nav.addEventListener("click", (e) => { if (e.target.closest("a") && nav.classList.contains("terbuka")) setMenu(false, false); });
+  document.addEventListener("keydown", (e) => {
+    if (!nav.classList.contains("terbuka")) return;
+    if (e.key === "Escape") { setMenu(false); return; }
+    // Kekalkan fokus Tab di dalam menu semasa terbuka
+    if (e.key === "Tab") {
+      const boleh = $$("button, a", nav);
+      const pertama = boleh[0], akhir = boleh[boleh.length - 1];
+      if (e.shiftKey && document.activeElement === pertama) { e.preventDefault(); akhir.focus(); }
+      else if (!e.shiftKey && document.activeElement === akhir) { e.preventDefault(); pertama.focus(); }
+    }
+  });
+  // Reset menu jika skrin dilebarkan ke paparan desktop semasa menu terbuka
+  window.matchMedia("(min-width: 1081px)").addEventListener("change", (e) => { if (e.matches) setMenu(false, false); });
 
   // Ticker: jeda / main
   const ticker = $(".ticker");
@@ -1027,7 +1058,12 @@
     }));
     $("button", lampu).addEventListener("click", tutup);
     lampu.addEventListener("click", (e) => { if (e.target === lampu) tutup(); });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && lampu.classList.contains("terbuka")) tutup(); });
+    document.addEventListener("keydown", (e) => {
+      if (!lampu.classList.contains("terbuka")) return;
+      if (e.key === "Escape") tutup();
+      // Hanya satu kawalan boleh difokus (butang tutup): kekalkan fokus padanya
+      else if (e.key === "Tab") { e.preventDefault(); $("button", lampu).focus(); }
+    });
   }
 
   // Borang demonstrasi — tidak menghantar data

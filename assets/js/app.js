@@ -343,7 +343,7 @@
   }
 
   function beranda() {
-    const fHero = K.foto["foto-maulid"];
+    const fHero = K.foto["foto-bangunan"];
     const bahagian = pecahNama(nama);
     const intro = K.identiti.pengenalan;
     const aktiviti = K.aktiviti.filter(boleh);

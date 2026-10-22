@@ -57,6 +57,7 @@ window.KANDUNGAN = {
     fotoMaulid: { nama: "Foto Facebook — majlis maulid", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1662965372007934&set=pcb.1662965748674563" },
     fotoBomba: { nama: "Foto Facebook — lawatan bomba", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1668458931458578&set=pcb.1668459351458536" },
     fotoRuang: { nama: "Foto Facebook — pemeriksaan ruang", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1668459081458563&set=pcb.1668459351458536" },
+    fotoBangunan: { nama: "Foto Facebook — bangunan madrasah", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=1246462213658254" },
     posterWakaf: { nama: "Poster projek wakaf (Facebook, 30 Nov 2023)", jenis: "facebook", url: "https://www.facebook.com/photo/?fbid=902934651344347&set=a.104212634549890" },
     infaqpay: { nama: "Halaman InfaqPay (Direct Debit)", jenis: "sekunder", url: "https://infaqpay.my/go/madrasahtahfizannurgedong" },
     googleMaps: { nama: "Penyenaraian Google Maps", jenis: "sekunder", url: "https://www.google.com/maps/place/MADRASAH+TAHFIZ+ANNUR+GEDONG/data=!4m2!3m1!1s0x0:0x63a4f3310ab89875" },
@@ -223,6 +224,14 @@ window.KANDUNGAN = {
   /* FOTO                                                                */
   /* ------------------------------------------------------------------ */
   foto: {
+    // Latar hero beranda — dari album Facebook madrasah, belum disahkan pengurusan secara khusus.
+    "foto-bangunan": {
+      fail: "assets/img/foto/foto-bangunan-madrasah.jpg",
+      alt: "Bangunan dua tingkat madrasah berwarna putih dengan balkoni berpanel kerawang bintang lapan, dilihat dari bawah dengan langit biru.",
+      kapsyen: "Bangunan Madrasah Tahfiz An-Nur Gedong.",
+      status: "facebook", sumber: ["fotoBangunan"],
+      catatan: "Dimuat turun daripada album Facebook madrasah; minta kebenaran pengurusan sebelum laman diterbitkan."
+    },
     // Foto disahkan pengurusan untuk penerbitan.
     "foto-maulid": {
       fail: "assets/img/foto/foto-majlis-maulid.jpg",
